@@ -1,0 +1,36 @@
+import discord, os
+from discord.ext import commands
+from discord.ext.commands import bot
+from discord.ext.commands.core import command
+
+# Переменная intents - хранит привилегии бота
+intents = discord.Intents.default()
+# Включаем привелегию на чтение сообщений
+intents.message_content = True
+# Создаем бота в переменной client и передаем все привелегии
+client = discord.Client(intents=intents)
+
+@client.event
+async def on_ready():
+    print(f'We have logged in as {client.user}')
+
+@client.event
+async def on_message(message):
+    if message.content.startswith('!hello'):
+        await message.channel.send("Hi!")
+    elif message.content.startswith('!bye'):
+        await message.channel.send(":wave:")
+    elif message.content.startswith('!meme'):
+        print(os.listdir('meme1'))
+        await message.channel.send(":done:")
+
+
+@bot.command(pass_context=True)
+async def clear(ctx, amount):
+    await ctx.purge_from(ctx.message.channel, limit=amount)
+    await ctx.send(f"Удалено {amount} сообщений.")
+async def test(ctx):
+    await ctx.send('Working!', file=discord.File('Meme1.png'))
+
+
+client.run("")
